@@ -17,10 +17,13 @@ const Page = () => {
   // Obtenez la dernière prestation à partir des données
   const { data, error } = useData();
   // recuperer la dernier image du data
-  const last =
-    data && data.events && data.events.length > 0
-      ? data.events[data.events.length - 1]
-      : null;
+  let last = null;
+  if (data && data.events && data.events.length > 0) {
+    const [latestEvent] = data.events
+      .slice()
+      .sort((a, b) => new Date(b.date) - new Date(a.date));
+    last = latestEvent;
+  }
 
   return (
     <>
@@ -131,7 +134,7 @@ const Page = () => {
                   onClick={() => setIsOpened(true)}
                   imageSrc={last?.cover}
                   title={last?.title}
-                  date={new Date(last?.date)}
+                  date={new Date(last?.date)} // Utilisation de la date de la dernière prestation
                   label={last?.type}
                 />
               )}
